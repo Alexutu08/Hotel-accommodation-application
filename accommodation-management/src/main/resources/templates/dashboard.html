@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Dashboard</h1>
+<form th:action="@{/dashboard}" method="post">
+    <div>
+        <label for="Users">Users:</label>
+        <input type="text" id="Users" name="Users" required />
+    </div>
+    <div>
+        <label for="Locations">Locations:</label>
+        <input type="text" id="Locations" name="Locations" required />
+    </div>
+    <div>
+        <label for="Rooms">Rooms:</label>
+        <input type="text" id="Rooms" name="Rooms" required />
+    </div>
+</form>
+</body>
+</html>
