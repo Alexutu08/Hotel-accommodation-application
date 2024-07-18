@@ -1,5 +1,6 @@
 package com.example.accommodationmanagement.controller;
 
+import com.example.accommodationmanagement.config.*;
 import com.example.accommodationmanagement.model.User;
 import com.example.accommodationmanagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/login";
+    public String registerUser(@ModelAttribute("user") User user, Model model) {
+        try {
+            userService.save(user);
+            return "redirect:/login";
+        } catch (UserAlreadyExistsException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "register";
+        }
     }
 
     @GetMapping("/login")

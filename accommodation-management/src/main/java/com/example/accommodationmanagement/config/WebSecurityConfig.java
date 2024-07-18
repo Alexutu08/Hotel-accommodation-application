@@ -3,6 +3,7 @@ package com.example.accommodationmanagement.config;
 import com.example.accommodationmanagement.service.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.*;
@@ -18,9 +19,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorizeRequests ->
+                .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/register", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/register", "/login", "/users", "/css/**", "/js/**", "/images/**").permitAll() // Endpoint-uri accesibile public
+//                                .requestMatchers(HttpMethod.GET,"/api/users/**").hasAnyRole("SUPERADMIN", "USER") // Endpoint-uri accesibile la GET pentru toți utilizatorii autentificați
+//                                .requestMatchers(HttpMethod.DELETE,"/api/users/**").hasRole("SUPERADMIN") // Endpoint-uri accesibile doar SuperAdmin la DELETE
                                 .anyRequest().authenticated()
                 )
                 .formLogin(formLogin ->
@@ -41,6 +44,7 @@ public class WebSecurityConfig {
 
         return http.build();
     }
+
 
 
     @Bean

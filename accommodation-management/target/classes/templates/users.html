@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Users</title>
+</head>
+<body>
+<h1>Users</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Username</th>
+    <th>Email</th>
+    <th>Role</th>
+  </tr>
+  </thead>
+  <tbody id="usersTable">
+  <!-- Aici vor fi afișați utilizatorii -->
+  </tbody>
+</table>
+
+<script>
+  const currentUserRole = 'ROLE_SUPERADMIN'; // Exemplu pentru a seta rolul utilizatorului curent
+
+  // Funcția pentru a obține și afișa utilizatorii
+  function getUsers() {
+    fetch('/api/users')
+            .then(response => response.json())
+            .then(users => {
+              const usersTable = document.getElementById('usersTable');
+              usersTable.innerHTML = '';
+
+              users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.username}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                            <td>
+                                ${currentUserRole === 'ROLE_SUPERADMIN' ? `<button onclick="deleteUser(${user.id})">Șterge</button>` : ''}
+                            </td>
+                        `;
+                usersTable.appendChild(row);
+              });
+            })
+            .catch(error => console.error('Eroare în obținerea utilizatorilor:', error));
+  }
+
+  // Funcția pentru ștergerea unui utilizator
+  function deleteUser(userId) {
+    fetch(`/api/users/${userId}`, {
+      method: 'DELETE'
+    })
+            .then(() => {
+              alert('Utilizatorul a fost șters cu succes!');
+              getUsers(); // Reîncarcă lista de utilizatori după ștergere
+            })
+            .catch(error => console.error('Eroare în ștergerea utilizatorului:', error));
+  }
+
+  // Apelăm funcția pentru a afișa utilizatorii la încărcarea paginii
+  getUsers();
+</script>
+</body>
+</html>
